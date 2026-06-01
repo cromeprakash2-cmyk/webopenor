@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexusHub - Ultimate Quantum Portal</title>
+  <style>
+    /* --- Universal Dark Premium Theme --- */
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; }
+    body { 
+      background: radial-gradient(circle at 50% 50%, #0f172a 0%, #020617 100%); 
+      min-height: 100vh; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      padding: 20px; 
+      color: #f8fafc;
+      overflow-x: hidden;
+    }
+
+    /* Modern Glassmorphic Container */
+    .container { 
+      background: rgba(15, 23, 42, 0.65); 
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      width: 100%; 
+      max-width: 440px; 
+      padding: 40px 30px; 
+      border-radius: 24px; 
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(56, 189, 248, 0.1); 
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+      position: relative;
+    }
+    
+    .url-bar { 
+      font-size: 11px; 
+      color: #64748b; 
+      text-align: center; 
+      margin-bottom: 25px; 
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    
+    .screen { display: none; }
+    .screen.active { display: block; animation: fadeIn 0.4s ease-out; }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 { 
+      margin-bottom: 25px; 
+      color: #fff; 
+      font-size: 28px; 
+      text-align: center; 
+      font-weight: 800; 
+      letter-spacing: -0.5px;
+      background: linear-gradient(to right, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    /* Modern Input Fields & Dropdowns */
+    .input-group { margin-bottom: 18px; position: relative; }
+    
+    input[type="text"], input[type="password"], input[type="email"], input[type="tel"], select { 
+      width: 100%; 
+      padding: 14px 16px; 
+      border: 1px solid rgba(255, 255, 255, 0.1); 
+      border-radius: 12px; 
+      font-size: 14px; 
+      outline: none; 
+      background: rgba(30, 41, 59, 0.4); 
+      color: #fff; 
+      font-weight: 500;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    input:focus, select:focus {
+      border-color: #38bdf8;
+      background: rgba(30, 41, 59, 0.7);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+    }
+    
+    input[type="password"] { padding-right: 70px; }
+    
+    /* Sleek Dropdown Arrow */
+    select { 
+      appearance: none; 
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+      background-repeat: no-repeat; 
+      background-position: right 16px center; 
+      background-size: 16px; 
+      cursor: pointer; 
+    }
+
+    /* Password Action Badge */
+    .toggle-password { 
+      position: absolute; 
+      right: 12px; 
+      top: 50%; 
+      transform: translateY(-50%); 
+      cursor: pointer; 
+      font-size: 11px; 
+      font-weight: 700; 
+      background: rgba(56, 189, 248, 0.1); 
+      color: #38bdf8; 
+      padding: 6px 12px; 
+      border-radius: 8px; 
+      user-select: none; 
+      transition: 0.2s;
+    }
+    .toggle-password:hover { background: rgba(56, 189, 248, 0.2); }
+    
+    /* Elegant Button Actions */
+    .btn-row { display: flex; flex-direction: column; gap: 10px; margin-top: 25px; }
+    .btn-split { display: flex; gap: 10px; }
+    
+    button { 
+      border: none; 
+      padding: 14px; 
+      font-size: 14px; 
+      font-weight: 700; 
+      border-radius: 12px; 
+      cursor: pointer; 
+      transition: all 0.2s ease; 
+      text-align: center;
+    }
+    button:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    button:active { transform: translateY(0); }
+    
+    .btn-blue { background: linear-gradient(135deg, #38bdf8, #0369a1); color: white; flex: 1; box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2); }      
+    .btn-yellow { background: rgba(255, 255, 255, 0.05); color: #f1f5f9; border: 1px solid rgba(255, 255, 255, 0.1); flex: 1; }  
+    .btn-yellow:hover { background: rgba(255, 255, 255, 0.1); }
+    .btn-green { background: transparent; color: #94a3b8; font-size: 13px; font-weight: 500; padding: 5px; }     
+    .btn-green:hover { color: #fff; }
+    .btn-danger { background: linear-gradient(135deg, #ef4444, #b91c1c); color: white; padding: 8px 14px; font-size: 12px; border-radius: 8px; }
+
+    /* Neon Pulse Timer Styling */
+    .timer-alert { 
+      background: rgba(30, 41, 59, 0.5); 
+      border: 1px solid rgba(56, 189, 248, 0.2); 
+      color: #94a3b8; 
+      padding: 16px; 
+      border-radius: 12px; 
+      text-align: center; 
+      font-size: 13px; 
+      font-weight: 600; 
+      margin-bottom: 20px; 
+      letter-spacing: 0.5px;
+    }
+    .highlight-num { color: #38bdf8; font-size: 16px; font-weight: 800; }
+
+    /* --- MASTER ADMIN STORAGE VIEW --- */
+    .admin-container { background: #0b1329; color: #fff; width: 100%; max-width: 1000px; padding: 40px; border-radius: 24px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); border: 1px solid rgba(239, 68, 68, 0.2); display: none; }
+    .admin-container.active { display: block; animation: fadeIn 0.4s ease-out; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; margin-bottom: 25px; }
+    table { width: 100%; border-collapse: collapse; background: rgba(30, 41, 59, 0.3); border-radius: 14px; overflow: hidden; }
+    th, td { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; text-align: left; }
+    th { background: rgba(15, 23, 42, 0.6); color: #38bdf8; font-weight: 700; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+
+    /* --- MODERN COMPONENT DASHBOARD PANEL --- */
+    .dashboard-container { background: #030712; color: #fff; width: 100%; max-width: 1300px; padding: 40px; border-radius: 28px; box-shadow: 0 40px 80px rgba(0,0,0,0.7); border: 1px solid rgba(56, 189, 248, 0.15); display: none; }
+    .dashboard-container.active { display: block; animation: fadeIn 0.5s ease; }
+    .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px; }
+    .header-info { text-align: left; }
+    .logout-btn { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: #ef4444; padding: 10px 22px; border-radius: 10px; font-weight: 700; }
+    .logout-btn:hover { background: #ef4444; color: white; }
+    .controls { display: flex; flex-direction: column; gap: 20px; margin-bottom: 35px; background: rgba(15, 23, 42, 0.4); padding: 25px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); }
+    .search-box { width: 100%; padding: 16px 24px; background: rgba(30, 41, 59, 0.5); border-radius: 12px; color: white; font-size: 15px; outline: none; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+    .search-box:focus { border-color: #38bdf8; background: rgba(30, 41, 59, 0.8); }
+    .filter-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+    .filter-btn { padding: 12px 24px; border-radius: 100px; font-weight: 600; font-size: 13px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: #94a3b8; cursor: pointer; transition: 0.2s; }
+    .filter-btn.active, .filter-btn:hover { background: #fff; color: #030712; border-color: #fff; font-weight: 700; }
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+    .platform-card { background: rgba(15, 23, 42, 0.45); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 25px; text-align: center; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 165px; }
+    .platform-card:hover { transform: translateY(-5px); background: rgba(30, 41, 59, 0.6); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
+    .icon { font-size: 40px; margin-bottom: 12px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="authBox">
+    <div class="url-bar">⚡ SECURE INTERFACE // NEXUS_HUB</div>
+    
+    <div id="loginScreen" class="screen active">
+      <h2>Account Login</h2>
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="input-group"><input type="text" id="loginUid" placeholder="Enter UID" required></div>
+        <div class="input-group">
+          <input type="password" id="loginPass" placeholder="Enter Password" required>
+          <span class="toggle-password" id="eyeIcon" onclick="togglePasswordVisibility('loginPass', 'eyeIcon')">Hide</span>
+        </div>
+        
+        <div class="input-group">
+          <select id="loginType" required>
+            <option value="" disabled selected>Select Access Level Type</option>
+            <option value="Normal">Normal User U.I.D</option>
+            <option value="Coder">Coder/Programmer U.I.D</option>
+            <option value="Hacker">Hacker/Cyber security U.I.D</option>
+          </select>
+        </div>
+        
+        <div class="btn-row">
+          <button type="submit" class="btn-blue">Sign In</button>
+          <div class="btn-split">
+            <button type="button" class="btn-yellow" onclick="switchScreen('registerScreen')">Create Account</button>
+          </div>
+          <button type="button" class="btn-green" onclick="triggerForgotHelp()">Forgot Password?</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="registerScreen" class="screen">
+      <h2>Setup Profile</h2>
+      <form id="registerForm" onsubmit="handleRegisterSubmit(event)">
+        <div class="input-group"><input type="text" id="regUid" placeholder="Choose Unique UID" required></div>
+        <div class="input-group">
+          <input type="password" id="regPass" placeholder="Set Secure Password" required>
+          <span class="toggle-password" id="regEyeIcon" onclick="togglePasswordVisibility('regPass', 'regEyeIcon')">Hide</span>
+        </div>
+        <div class="input-group"><input type="email" id="regEmail" placeholder="Email Address" required></div>
+        <div class="input-group"><input type="tel" id="regPhone" placeholder="10 Digit Phone Number" pattern="[0-9]{10}" required></div>
+        
+        <div class="input-group">
+          <select id="regType" required>
+            <option value="" disabled selected>Choose Core Environment</option>
+            <option value="Normal">Normal User U.I.D</option>
+            <option value="Coder">Coder/Programmer U.I.D</option>
+            <option value="Hacker">Hacker/Cyber security U.I.D</option>
+          </select>
+        </div>
+
+        <div class="btn-row">
+          <button type="submit" class="btn-blue">Create Profile</button>
+          <button type="button" class="btn-yellow" onclick="switchScreen('loginScreen')">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="otpScreen" class="screen">
+      <h2>OTP Verification</h2>
+      <div class="input-group">
+        <input type="text" id="otpInput" placeholder="Enter OTP" style="text-align: center; font-size: 18px; letter-spacing: 4px;" readonly>
+      </div>
+      <div class="timer-alert" id="otpTimerMsg">OTP will automatically filled in <span id="countdownSpan" class="highlight-num">5</span> second</div>
+      <form id="otpForm" onsubmit="verifyAndSaveUser(event)">
+        <div class="btn-row">
+          <button type="submit" class="btn-blue" style="width:100%;">Verify Token</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-container" id="adminPanel">
+    <div class="admin-header">
+      <h1 style="font-size: 22px; font-weight:800; color:#ef4444; letter-spacing:-0.5px;">📋 Main Identity Matrix Vault</h1>
+      <button style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1);" onclick="closeAdminPanel()">Exit Database</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Email Address</th>
+          <th>Phone Link</th>
+          <th>Password Hash</th>
+          <th>Environment</th>
+          <th>Management Action</th>
+        </tr>
+      </thead>
+      <tbody id="adminUserTableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="dashboard-container" id="mainDashboard">
+    <div class="top-header">
+      <div class="header-info">
+        <h1 id="portalTitle" style="font-size: 32px; font-weight: 900; letter-spacing: -1px;">QUANTUM INTERFACE</h1>
+        <p id="portalModeSubtext" style="margin-top:4px; font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;"></p>
+      </div>
+      <button class="logout-btn" onclick="logout()">Terminate Session</button>
+    </div>
+    <div class="controls">
+      <input type="text" class="search-box" id="searchBar" placeholder="Search decrypted indices..." oninput="renderWebsites()">
+      <div class="filter-buttons" id="filterContainer"></div>
+    </div>
+    <div class="grid-container" id="websitesGrid"></div>
+  </div>
+
+  <script>
+    const defaultAdmins = [
+      { uid: "Admin", email: "admin@nexus.com", phone: "9876543210", pass: "admin@123", mode: "Master Database" },
+      { uid: "Hacker@Admin", email: "hacker@nexus.com", phone: "9998887776", pass: "hackeradmin@123", mode: "Hacker" },
+      { uid: "Coding@Admin", email: "coder@nexus.com", phone: "8887776665", pass: "codingadmin@123", mode: "Coder" }
+    ];
+
+    if (!localStorage.getItem('nexus_users') || JSON.parse(localStorage.getItem('nexus_users')).length === 0) {
+      localStorage.setItem('nexus_users', JSON.stringify(defaultAdmins));
+    }
+
+    function getUsersFromStorage() { return JSON.parse(localStorage.getItem('nexus_users')); }
+    let tempUserCache = null; 
+
+    function switchScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(scr => scr.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function togglePasswordVisibility(inputId, eyeId) {
+      const passInput = document.getElementById(inputId);
+      const badge = document.getElementById(eyeId);
+      passInput.type = passInput.type === 'password' ? 'text' : 'password';
+      badge.innerText = passInput.type === 'password' ? 'Hide' : 'Show';
+    }
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const uid = document.getElementById('regUid').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const pass = document.getElementById('regPass').value.trim();
+      const mode = document.getElementById('regType').value;
+
+      const currentDB = getUsersFromStorage();
+      if (currentDB.some(u => u.uid.toLowerCase() === uid.toLowerCase())) {
+        alert("This System Identity is already claimed!");
+        return;
+      }
+
+      tempUserCache = { uid, email, phone, pass, mode };
+      switchScreen('otpScreen');
+      startOtpProcessingSimulator(); 
+    }
+
+    function startOtpProcessingSimulator() {
+      const msgBox = document.getElementById('otpTimerMsg');
+      const inputField = document.getElementById('otpInput');
+      inputField.value = '';
+      msgBox.innerHTML = 'OTP will automatically filled in <span id="countdownSpan" class="highlight-num">5</span> second';
+      
+      let countdown = 5;
+      const interval = setInterval(() => {
+        countdown--;
+        if(countdown > 0) {
+          document.getElementById('countdownSpan').innerText = countdown;
+        } else {
+          clearInterval(interval);
+          inputField.value = "NEX786"; 
+          msgBox.innerHTML = "<span style='color:#10b981; font-weight:700;'>✅ Verification Token Attached Securely!</span>";
+        }
+      }, 1000);
+    }
+
+    function verifyAndSaveUser(e) {
+      e.preventDefault();
+      if(document.getElementById('otpInput').value !== "NEX786") {
+        alert("System Synchronization pending. Please wait for authorization sequence to finish.");
+        return;
+      }
+
+      const currentDB = getUsersFromStorage();
+      currentDB.push(tempUserCache);
+      localStorage.setItem('nexus_users', JSON.stringify(currentDB));
+      
+      alert(`Identity Sequence Profile for "${tempUserCache.uid}" saved permanently!`);
+      document.getElementById('registerForm').reset();
+      tempUserCache = null;
+      switchScreen('loginScreen');
+    }
+
+    function deleteUserAccount(uidToDelete) {
+      if (uidToDelete === "Admin") {
+        alert("Security Lock Error: Core Framework Matrix Admin cannot be purged.");
+        return;
+      }
+      if (confirm(`Purge profile information for "${uidToDelete}" permanently from registry?`)) {
+        let currentDB = getUsersFromStorage();
+        currentDB = currentDB.filter(user => user.uid !== uidToDelete);
+        localStorage.setItem('nexus_users', JSON.stringify(currentDB));
+        updateAdminTable(); 
+      }
+    }
+
+    function updateAdminTable() {
+      document.getElementById('adminUserTableBody').innerHTML = getUsersFromStorage().map(user => `
+        <tr>
+          <td style="font-weight:700; color: #fff;">${user.uid}</td>
+          <td style="color: #94a3b8;">${user.email}</td>
+          <td style="color: #94a3b8;">${user.phone}</td>
+          <td style="color: #38bdf8; font-family:monospace;">${user.pass}</td>
+          <td><span style="padding: 4px 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; font-size:12px; font-weight:600;">${user.mode}</span></td>
+          <td>
+            ${user.uid === 'Admin' ? '<span style="color:#64748b; font-size:12px;">Immutable Protection</span>' : `<button class="btn-danger" onclick="deleteUserAccount('${user.uid}')">Purge Data 🗑️</button>`}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const uid = document.getElementById('loginUid').value.trim();
+      const pass = document.getElementById('loginPass').value.trim();
+      const selectedType = document.getElementById('loginType').value;
+      
+      const currentDB = getUsersFromStorage();
+      const foundUser = currentDB.find(u => u.uid.toLowerCase() === uid.toLowerCase() && u.pass === pass);
+
+      if (foundUser) {
+        if (foundUser.uid !== "Admin" && foundUser.mode !== selectedType) {
+          alert(`Access Conflict! Identity signature belongs to environmental tier "${foundUser.mode}".`);
+          return;
+        }
+
+        if (foundUser.uid === "Admin") {
+          resetLoginForm();
+          document.getElementById('authBox').style.display = 'none';
+          document.getElementById('adminPanel').classList.add('active');
+          updateAdminTable();
+          return;
+        } 
+        
+        activeUserRole = foundUser.mode; 
+        resetLoginForm();
+        document.getElementById('authBox').style.display = 'none';
+        document.getElementById('mainDashboard').classList.add('active');
+        
+        if (activeUserRole === 'Coder') {
+          currentSelectedCategory = 'Coding';
+          setupDashboard("💻 METADATA DEVELOPER ENGINE", `🟪 DEV ENVIRONMENT CONTAINER // STABLE`, "#a855f7", "Search compilers...");
+        } else if (activeUserRole === 'Hacker') {
+          currentSelectedCategory = 'Hacking';
+          setupDashboard("💀 NEURAL CYBER BLOCK TERMINAL", `🟧 PENETRATION OVERRIDE SYSTEM // ENCRYPTED`, "#ff4757", "Search exploits...");
+        } else {
+          currentSelectedCategory = 'ALL';
+          setupDashboard("🌐 STANDARD INDEX REPOSITORY", `⚡ BASELINE CLIENT ACCESS MODULE // TERMINAL USER: ${foundUser.uid}`, "#38bdf8", "Search platforms...");
+        }
+        return;
+      }
+      alert("Access Prohibited! Core token signatures did not match system registries.");
+    }
+
+    function triggerForgotHelp() {
+      const inputUid = prompt("Enter registration UID target:");
+      if (!inputUid) return;
+      const currentDB = getUsersFromStorage();
+      const user = currentDB.find(u => u.uid.toLowerCase() === inputUid.trim().toLowerCase());
+      if (!user) { alert("❌ Identification not located in system arrays!"); return; }
+      
+      const mail = prompt(`Provide link mail verified to context "${user.uid}":`);
+      const ph = prompt(`Provide contact numeric sequence linked to "${user.uid}":`);
+
+      if (mail && ph && mail.trim().toLowerCase() === user.email.toLowerCase() && ph.trim() === user.phone) {
+        alert(`✅ Authorization Reset Passed! Cleartext Password is: ${user.pass}`);
+      } else {
+        alert("❌ Input verification key matches rejected.");
+      }
+    }
+
+    // --- INTEGRATED REPOSITORY STORAGE DATA ---
+    const websiteDatabase = [];
+    const hackingTools = [{ name: "Kali Linux System Core", url: "https://www.kali.org", icon: "🐉" }, { name: "VirusTotal Sandbox Analyser", url: "https://www.virustotal.com", icon: "🛡️" }];
+    hackingTools.forEach(t => websiteDatabase.push({...t, cat: "Hacking"}));
+    for(let i=1; i<=45; i++) { websiteDatabase.push({ name: `Cyber Exploit Matrix Interface ${i}`, url: "https://owasp.org", icon: "⚙️", cat: "Hacking" }); }
+
+    const codingTools = [{ name: "GitHub Central Engine", url: "https://github.com", icon: "🐙" }, { name: "StackOverflow Terminal", url: "https://stackoverflow.com", icon: "🥞" }];
+    codingTools.forEach(t => websiteDatabase.push({...t, cat: "Coding"}));
+    for(let i=1; i<=45; i++) { websiteDatabase.push({ name: `Compiler Logical Framework Node ${i}`, url: "https://github.com", icon: "💻", cat: "Coding" }); }
+
+    const shoppingTools = [{ name: "Amazon Global Commerce", url: "https://www.amazon.in", icon: "📦" }];
+    shoppingTools.forEach(t => websiteDatabase.push({...t, cat: "Shopping"}));
+    for(let i=1; i<=45; i++) { websiteDatabase.push({ name: `Logistics Procurement Endpoint ${i}`, url: "https://amazon.in", icon: "🛍️", cat: "Shopping" }); }
+
+    const entertainmentTools = [{ name: "Netflix Stream Grid", url: "https://www.netflix.com", icon: "🍿" }];
+    entertainmentTools.forEach(t => websiteDatabase.push({...t, cat: "Entertainment"}));
+    for(let i=1; i<=45; i++) { websiteDatabase.push({ name: `Multi-Threaded Media Vector ${i}`, url: "https://youtube.com", icon: "🎥", cat: "Entertainment" }); }
+
+    const educationTools = [{ name: "Coursera Academy Interface", url: "https://www.coursera.org", icon: "🎓" }];
+    educationTools.forEach(t => websiteDatabase.push({...t, cat: "Education"}));
+    for(let i=1; i<=45; i++) { websiteDatabase.push({ name: `Knowledge Aggregator System ${i}`, url: "https://wikipedia.org", icon: "📝", cat: "Education" }); }
+
+    const utilityTools = [{ name: "Google Query Network", url: "https://www.google.com", icon: "🔍" }];
+    utilityTools.forEach(t => websiteDatabase.push({...t, cat: "Utility"}));
+    for(let i=1; i<=45; i++) { websiteDatabase.push({ name: `Asset Utility Functional Block ${i}`, url: "https://google.com", icon: "⚙️", cat: "Utility" }); }
+
+    let activeUserRole = 'Normal';       
+    let currentSelectedCategory = 'ALL'; 
+
+    function setupDashboard(title, subtext, color, placeholder) {
+      const dashboard = document.getElementById('mainDashboard');
+      dashboard.style.borderColor = color;
+      dashboard.style.boxShadow = `0 30px 60px ${color}1a`;
+      document.getElementById('portalTitle').innerText = title;
+      document.getElementById('portalModeSubtext').innerText = subtext;
+      document.getElementById('portalModeSubtext').style.color = color;
+      
+      const sb = document.getElementById('searchBar');
+      sb.placeholder = placeholder;
+      sb.style.borderColor = 'rgba(255,255,255,0.1)';
+      sb.value = '';
+      
+      generateFilters();
+      renderWebsites();
+    }
+
+    function generateFilters() {
+      const container = document.getElementById('filterContainer');
+      container.innerHTML = '';
+
+      if (activeUserRole === 'Coder') {
+        createFilterButton(container, "⚙️ Dev Compilers & Frameworks (50+)", "Coding", true);
+      } else if (activeUserRole === 'Hacker') {
+        createFilterButton(container, "🛡️ Cyber Exploit Repositories (50+)", "Hacking", true);
+      } else {
+        createFilterButton(container, "🌐 Decrypted Master List (250+)", "ALL", currentSelectedCategory === 'ALL');
+        createFilterButton(container, "🛍️ Supply Interfaces", "Shopping", currentSelectedCategory === 'Shopping');
+        createFilterButton(container, "🎬 Visual Stream Matrix", "Entertainment", currentSelectedCategory === 'Entertainment');
+        createFilterButton(container, "📚 Academic Protocols", "Education", currentSelectedCategory === 'Education');
+        createFilterButton(container, "🚀 Core Micro-Utilities", "Utility", currentSelectedCategory === 'Utility');
+      }
+    }
+
+    function createFilterButton(parent, label, catVal, isActive) {
+      const btn = document.createElement('button');
+      btn.className = `filter-btn ${isActive ? 'active' : ''}`;
+      btn.innerText = label;
+      btn.onclick = () => {
+        currentSelectedCategory = catVal;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderWebsites();
+      };
+      parent.appendChild(btn);
+    }
+
+    function renderWebsites() {
+      const grid = document.getElementById('websitesGrid');
+      const searchVal = document.getElementById('searchBar').value.toLowerCase();
+      
+      let filtered = websiteDatabase.filter(site => {
+        const matchesSearch = site.name.toLowerCase().includes(searchVal);
+        const matchesCategory = (currentSelectedCategory === 'ALL') ? (site.cat !== 'Hacking' && site.cat !== 'Coding') : (site.cat === currentSelectedCategory);
+        return matchesSearch && matchesCategory;
+      });
+
+      if(activeUserRole === 'Coder') filtered = websiteDatabase.filter(s => s.cat === 'Coding' && s.name.toLowerCase().includes(searchVal));
+      if(activeUserRole === 'Hacker') filtered = websiteDatabase.filter(s => s.cat === 'Hacking' && s.name.toLowerCase().includes(searchVal));
+
+      grid.innerHTML = filtered.map(site => {
+        let ht = '#38bdf8'; 
+        if(site.cat === 'Hacking') ht = '#ff4757';
+        if(site.cat === 'Coding') ht = '#a855f7';
+        if(site.cat === 'Entertainment') ht = '#e11d48';
+        if(site.cat === 'Education') ht = '#10b981';
+
+        return `
+          <div class="platform-card" onmouseenter="this.style.borderColor='${ht}66'; this.style.boxShadow='0 8px 20px ${ht}1a'" onmouseleave="this.style.borderColor='rgba(255,255,255,0.05)'; this.style.boxShadow='none'" onclick="window.open('${site.url}', '_blank')">
+            <div class="icon">${site.icon}</div>
+            <h3 style="font-size:14px; color:#f1f5f9; text-overflow:ellipsis; white-space:nowrap; overflow:hidden; width:100%; font-weight:600;">${site.name}</h3>
+            <p style="font-size:10px; margin-top:6px; color:${ht}; font-weight:700; letter-spacing:1px; text-transform:uppercase;">${site.cat}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function resetLoginForm() {
+      document.getElementById('loginForm').reset();
+      document.getElementById('loginPass').type = 'password';
+      document.getElementById('eyeIcon').innerText = 'Hide';
+    }
+
+    function closeAdminPanel() { document.getElementById('adminPanel').classList.remove('active'); document.getElementById('authBox').style.display = 'block'; }
+    function logout() { document.getElementById('mainDashboard').classList.remove('active'); document.getElementById('authBox').style.display = 'block'; }
+  </script>
+</body>
+</html>
