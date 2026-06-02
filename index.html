@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexusHub Elite v7.0 - Ultimate Operational OS Gateway Terminal</title>
+  <style>
+    /* =========================================================================
+       NEXUSHUB ELITE V7.0 MASTER MULTI-THEME CONFIGURATION STYLE MATRIX
+       ========================================================================= */
+    :root {
+      --bg-gradient: radial-gradient(circle at 50% 50%, #0a0f1d 0%, #020617 100%);
+      --panel-bg: rgba(15, 23, 42, 0.8);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --accent-color: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.15);
+      --btn-primary-bg: #2563eb;
+      --btn-primary-glow: rgba(37, 99, 235, 0.4);
+      --text-main: #ffffff;
+      --text-muted: #94a3b8;
+      --input-bg: rgba(2, 6, 23, 0.6);
+    }
+
+    /* Cyberpunk Theme Modifiers */
+    body.theme-cyberpunk {
+      --bg-gradient: linear-gradient(135deg, #120136 0%, #03001e 100%);
+      --panel-bg: rgba(40, 2, 90, 0.6);
+      --border-color: rgba(255, 0, 128, 0.3);
+      --accent-color: #ff007f;
+      --accent-glow: rgba(255, 0, 128, 0.3);
+      --btn-primary-bg: #ff007f;
+      --btn-primary-glow: rgba(255, 0, 128, 0.5);
+      --text-main: #00ffff;
+      --text-muted: #bd93f9;
+      --input-bg: rgba(15, 0, 30, 0.8);
+    }
+
+    /* Matrix Theme Modifiers */
+    body.theme-matrix {
+      --bg-gradient: linear-gradient(180deg, #000000 0%, #050d05 100%);
+      --panel-bg: rgba(0, 15, 0, 0.85);
+      --border-color: #00ff00;
+      --accent-color: #00ff00;
+      --accent-glow: rgba(0, 255, 0, 0.4);
+      --btn-primary-bg: #00aa00;
+      --btn-primary-glow: rgba(0, 255, 0, 0.3);
+      --text-main: #00ff00;
+      --text-muted: #008800;
+      --input-bg: #000000;
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Consolas', 'Inter', monospace, sans-serif; 
+    }
+    
+    body { 
+      background: var(--bg-gradient); 
+      min-height: 100vh; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      padding: 30px; 
+      color: var(--text-main);
+      overflow-x: hidden;
+      transition: all 0.3s ease;
+    }
+
+    /* Main Shell Architecture Configuration Frame */
+    .container { 
+      background: var(--panel-bg); 
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      width: 100%; 
+      max-width: 520px; 
+      padding: 50px 40px; 
+      border-radius: 28px; 
+      box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.9), 0 0 40px var(--accent-glow); 
+      border: 1px solid var(--border-color); 
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    /* Top Terminal URL Tracker Header Panel */
+    .url-bar { 
+      font-size: 11px; 
+      color: var(--accent-color); 
+      text-align: center; 
+      margin-bottom: 35px; 
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      font-weight: 800;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    }
+    
+    /* Global Application Transitions Layout Rules */
+    .screen { display: none; }
+    .screen.active { display: block; animation: ultraSlideUp 0.55s cubic-bezier(0.16, 1, 0.3, 1); }
+    
+    @keyframes ultraSlideUp {
+      from { opacity: 0; transform: translateY(30px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    h2 { margin-bottom: 25px; color: var(--text-main); font-size: 30px; text-align: center; font-weight: 800; letter-spacing: -0.5px; }
+    .subtitle-badge { display: block; text-align: center; font-size: 12px; font-weight: 700; color: var(--accent-color); margin-top: -18px; margin-bottom: 35px; text-transform: uppercase; letter-spacing: 2px; }
+    
+    /* Standard Input Layout Containers */
+    .input-group { margin-bottom: 22px; position: relative; }
+    .input-group label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+
+    input[type="text"], input[type="password"], input[type="email"], input[type="tel"], select { 
+      width: 100%; padding: 16px 22px; border: 1px solid var(--border-color); border-radius: 14px; 
+      font-size: 14px; outline: none; background: var(--input-bg); color: var(--text-main); transition: all 0.25s ease;
+    }
+    input:focus, select:focus { border-color: var(--accent-color); box-shadow: 0 0 0 4px var(--accent-glow); }
+    
+    /* Toggle Visibility Pin Alignment Sets */
+    .has-toggle { padding-right: 85px !important; }
+    .toggle-password { position: absolute; right: 20px; bottom: 18px; cursor: pointer; font-size: 11px; font-weight: 880; color: var(--accent-color); user-select: none; z-index: 10; text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    /* Real-Time Password Analyzer Grid Indicator */
+    .pass-strength-meter { display: flex; gap: 4px; margin-top: 6px; height: 4px; width: 100%; }
+    .strength-dot { flex: 1; background: rgba(255,255,255,0.05); border-radius: 2px; transition: all 0.2s; }
+    .strength-dot.active-weak { background: #ef4444; }
+    .strength-dot.active-medium { background: #f59e0b; }
+    .strength-dot.active-strong { background: #10b981; }
+
+    /* Theme Option Selection Ribbon */
+    .theme-ribbon { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; }
+    .theme-pill { padding: 6px 12px; font-size: 10px; font-weight: 700; border-radius: 20px; border: 1px solid var(--border-color); cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; background: rgba(0,0,0,0.2); color: var(--text-muted); }
+    .theme-pill.active { background: var(--accent-color); color: #000000; border-color: var(--accent-color); }
+
+    /* Interactive Interface Notification Banner Boxes */
+    .error-notice-msg { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; padding: 15px; border-radius: 14px; font-size: 13px; font-weight: 600; margin-bottom: 20px; display: none; text-align: center; }
+
+    /* Button Command Interface Layout Elements */
+    .btn-row-sketch { display: flex; flex-direction: column; gap: 14px; margin-top: 35px; }
+    button { border: none; padding: 16px; font-size: 14px; font-weight: 700; border-radius: 14px; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); text-align: center; letter-spacing: 0.5px; }
+    button:hover { transform: translateY(-2px); filter: brightness(1.2); }
+    button:active { transform: translateY(0); }
+    
+    .btn-primary { background: var(--btn-primary-bg); color: #ffffff; width: 100%; box-shadow: 0 5px 15px var(--btn-primary-glow); }   
+    .btn-secondary { background: rgba(255, 255, 255, 0.05); color: var(--text-main); width: 100%; border: 1px solid var(--border-color); } 
+    .btn-text { background: transparent; color: var(--text-muted); font-size: 13px; text-decoration: underline; padding: 5px; align-self: center; }
+
+    /* Modular Dynamic Selection Component Lists */
+    .radio-menu-wrapper { background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border-color); border-radius: 20px; padding: 18px; margin-bottom: 30px; }
+    .radio-option-row { display: flex; align-items: center; gap: 16px; padding: 16px; border-radius: 14px; cursor: pointer; transition: all 0.2s ease; margin-bottom: 12px; border: 1px solid transparent; }
+    .radio-option-row:last-child { margin-bottom: 0; }
+    .radio-option-row:hover { background: rgba(255, 255, 255, 0.03); }
+    .radio-circle { width: 22px; height: 22px; border: 2px solid var(--text-muted); border-radius: 50%; display: flex; justify-content: center; align-items: center; transition: all 0.2s ease; }
+    .radio-option-row.selected { background: var(--accent-glow); border-color: var(--accent-color); }
+    .radio-option-row.selected .radio-circle { border-color: var(--accent-color); }
+    .radio-option-row.selected .radio-circle::after { content: ''; width: 12px; height: 12px; background: var(--accent-color); border-radius: 50%; display: block; }
+    .radio-text-label { font-size: 14px; font-weight: 700; color: var(--text-main); }
+
+    /* High Tech Interception Tokens Visual Framework */
+    .otp-display-wrapper { display: flex; justify-content: center; gap: 12px; margin: 30px 0; }
+    .otp-digit-block { width: 54px; height: 60px; background: rgba(0,0,0,0.5); border: 2px solid var(--border-color); border-radius: 14px; font-size: 26px; font-weight: 800; color: var(--text-main); display: flex; justify-content: center; align-items: center; transition: all 0.2s ease; }
+    .otp-digit-block.filled { border-color: var(--accent-color); color: var(--accent-color); background: var(--accent-glow); box-shadow: 0 0 15px var(--accent-glow); }
+    .timer-alert { background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-color); color: var(--text-muted); padding: 16px; border-radius: 14px; text-align: center; font-size: 13px; margin-bottom: 30px; }
+    .highlight-num { color: var(--accent-color); font-weight: 800; }
+
+    /* Overlay Systems Modals Visual Layout Setup */
+    .cyber-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); z-index: 1000; display: none; justify-content: center; align-items: center; padding: 20px; }
+    .cyber-modal-overlay.active { display: flex; }
+    .cyber-modal { background: var(--panel-bg); border: 1px solid var(--border-color); width: 100%; max-width: 440px; border-radius: 24px; padding: 40px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); }
+
+    /* =========================================================================
+       MAIN CORE SYSTEM DASHBOARD COMPLEX ARCHITECTURE STYLE DEFINITIONS
+       ========================================================================= */
+    .dashboard-container { background: linear-gradient(145deg, #040814 0%, #01030a 100%); color: #ffffff; width: 100%; max-width: 1480px; padding: 50px; border-radius: 36px; border: 1px solid var(--border-color); display: none; box-shadow: 0 45px 100px rgba(0,0,0,0.95); transition: all 0.3s ease; }
+    .dashboard-container.active { display: block; animation: ultraSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 45px; border-bottom: 1px solid var(--border-color); padding-bottom: 30px; }
+    .logout-btn { background: #ef4444; color: white; padding: 15px 30px; border-radius: 14px; font-weight: 700; font-size: 14px; border: none; cursor: pointer; box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3); }
+    
+    .controls { display: flex; flex-direction: column; gap: 25px; margin-bottom: 45px; background: rgba(0,0,0,0.2); padding: 30px; border-radius: 24px; border: 1px solid var(--border-color); }
+    .search-box { width: 100%; padding: 20px 26px; background: rgba(0,0,0,0.5); border-radius: 14px; color: white; font-size: 15px; outline: none; border: 1px solid var(--border-color); transition: all 0.25s; }
+    .search-box:focus { border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-glow); }
+    
+    .filter-buttons { display: flex; flex-wrap: wrap; gap: 12px; }
+    .filter-btn { padding: 15px 26px; border-radius: 12px; font-weight: 600; font-size: 13px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); color: var(--text-muted); cursor: pointer; transition: all 0.25s ease; }
+    .filter-btn.active, .filter-btn:hover { background: var(--btn-primary-bg); color: #ffffff; border-color: var(--btn-primary-bg); box-shadow: 0 5px 15px var(--btn-primary-glow); }
+    
+    /* Dynamic Layout Matrix Grid Repositories */
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 26px; }
+    .platform-card { background: rgba(255, 255, 255, 0.01); border: 1px solid var(--border-color); border-radius: 22px; padding: 32px; text-align: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 170px; position: relative; overflow: hidden; }
+    .platform-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, transparent 60%, var(--accent-glow) 100%); opacity: 0; transition: opacity 0.3s; }
+    .platform-card:hover { transform: translateY(-6px); background: rgba(0,0,0,0.4); border-color: var(--accent-color); box-shadow: 0 20px 35px rgba(0,0,0,0.5); }
+    .platform-card:hover::before { opacity: 1; }
+    .icon { font-size: 46px; margin-bottom: 16px; position: relative; z-index: 2; }
+
+    /* Admin Management Control Workspace Frameworks */
+    .admin-section { background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border-color); border-radius: 26px; padding: 40px; margin-top: 55px; }
+    .admin-tab-headers { display: flex; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
+    .admin-tab { padding: 10px 20px; font-size: 13px; font-weight: 700; color: var(--text-muted); cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 8px; }
+    .admin-tab.active { background: var(--accent-glow); color: var(--accent-color); }
+    .admin-panel-content { display: none; }
+    .admin-panel-content.active { display: block; }
+
+    .admin-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .admin-table th, .admin-table td { padding: 18px 22px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+    .admin-table th { color: var(--accent-color); font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
+    .delete-btn { background: #ef4444; color: white; padding: 10px 18px; border-radius: 10px; font-size: 12px; font-weight: 700; border: none; cursor: pointer; transition: all 0.2s; }
+    .delete-btn:disabled { background: #475569; color: #94a3b8; cursor: not-allowed; opacity: 0.4; }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="authBox">
+    <div class="url-bar">NEXUSHUB QUANTUM SECURITIES SYSTEM LOG v7.0</div>
+
+    <div class="theme-ribbon">
+      <div class="theme-pill active" id="btnThemeDark" onclick="applySystemTheme('dark', 'btnThemeDark')">Default Dark</div>
+      <div class="theme-pill" id="btnThemeCyber" onclick="applySystemTheme('cyberpunk', 'btnThemeCyber')">Cyberpunk</div>
+      <div class="theme-pill" id="btnThemeMatrix" onclick="applySystemTheme('matrix', 'btnThemeMatrix')">Matrix Node</div>
+    </div>
+    
+    <div id="loginScreen" class="screen active">
+      <h2>Log in Menu</h2>
+      <div class="error-notice-msg" id="loginErrorMsg"></div>
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="input-group">
+          <label>Unique Framework Registration UID</label>
+          <input type="text" id="loginUid" placeholder="Enter Account Sequence UID" required>
+        </div>
+        <div class="input-group">
+          <label>Profile Security Authorization Key</label>
+          <input type="password" id="loginPass" class="has-toggle" placeholder="Enter Session Private Password" required>
+          <span class="toggle-password" id="eyeIcon" onclick="toggleField('loginPass', 'eyeIcon')">Hide</span>
+        </div>
+        <div class="input-group">
+          <label>Target Operational Environment</label>
+          <select id="loginType" required>
+            <option value="Normal">Special Authorized Master Cluster</option>
+          </select>
+        </div>
+        <div class="btn-row-sketch">
+          <button type="submit" class="btn-primary">Execute Connection Authentication</button>
+          <button type="button" class="btn-secondary" onclick="switchScreen('optionScreen')">Enroll New System Profile</button>
+          <button type="button" class="btn-text" onclick="openForgotModal()">Recover Lost Account Keys?</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="optionScreen" class="screen">
+      <h2>Select Category</h2>
+      <div class="radio-menu-wrapper">
+        <div class="radio-option-row selected" id="optNormal" onclick="selectRadioOption('Normal', 'optNormal')">
+          <div class="radio-circle"></div>
+          <div class="radio-text-label">Standard Account Environment</div>
+        </div>
+        <div class="radio-option-row" id="optCodingAdmin" onclick="selectRadioOption('CodingAdmin', 'optCodingAdmin')">
+          <div class="radio-circle"></div>
+          <div class="radio-text-label">Setup Infrastructure Coding Admin Keys</div>
+        </div>
+        <div class="radio-option-row" id="optHackingAdmin" onclick="selectRadioOption('HackingAdmin', 'optHackingAdmin')">
+          <div class="radio-circle"></div>
+          <div class="radio-text-label">Setup Security Testing Hacking Keys</div>
+        </div>
+      </div>
+      <div class="btn-row-sketch">
+        <button type="button" class="btn-primary" onclick="proceedToRegistration()">Validate Context & Forward Step</button>
+        <button type="button" class="btn-secondary" onclick="switchScreen('loginScreen')">Cancel & Back to Desk</button>
+      </div>
+    </div>
+
+    <div id="normalScreen" class="screen">
+      <h2 id="regFormTitle">Create New Account</h2>
+      <span class="subtitle-badge" id="regFormSub">User Register Terminal</span>
+      <div class="error-notice-msg" id="registerErrorMsg"></div>
+      
+      <form id="normalForm" onsubmit="handleRegistrationSubmit(event)">
+        <div class="input-group">
+          <label>Full Identity Legal Name</label>
+          <input type="text" id="normalName" placeholder="Enter Full Cleartext Name" required>
+        </div>
+        <div class="input-group">
+          <label>Requested Unique Identity UID</label>
+          <input type="text" id="normalUid" placeholder="Create System Identity UID" required>
+        </div>
+        <div class="input-group">
+          <label>Secure System Core Entry Password</label>
+          <input type="password" id="normalPass" class="has-toggle" placeholder="Create Multi-Character Password" oninput="analyzePasswordStrengthLive(this.value)" required>
+          <span class="toggle-password" id="normalEye" onclick="toggleField('normalPass', 'normalEye')">Hide</span>
+          <div class="pass-strength-meter">
+            <div class="strength-dot" id="sd1"></div>
+            <div class="strength-dot" id="sd2"></div>
+            <div class="strength-dot" id="sd3"></div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Electronic Mailing Contact Coordinates</label>
+          <input type="email" id="normalEmail" placeholder="identity@domain.com" required>
+        </div>
+        <div class="input-group">
+          <label>Communications Direct Telephone Link (10 Digits)</label>
+          <input type="tel" id="normalPhone" placeholder="Enter Numeric 10 Digits Only" pattern="[0-9]{10}" required>
+        </div>
+        
+        <div class="input-group" id="codingAdminCodeBlock" style="display: none;">
+          <label>Infrastructure Administrative Access Key Token</label>
+          <input type="password" id="codingAdminCodeInput" class="has-toggle" placeholder="Enter Core Coding Token Pin">
+          <span class="toggle-password" id="codingCodeEye" onclick="toggleField('codingAdminCodeInput', 'codingCodeEye')">Hide</span>
+        </div>
+
+        <div class="input-group" id="hackingAdminCodeBlock" style="display: none;">
+          <label>Operational Simulation Testing Pass Token</label>
+          <input type="password" id="hackingAdminCodeInput" class="has-toggle" placeholder="Enter Security Hacking Token Pin">
+          <span class="toggle-password" id="hackingCodeEye" onclick="toggleField('hackingAdminCodeInput', 'hackingCodeEye')">Hide</span>
+        </div>
+
+        <div class="btn-row-sketch">
+          <button type="submit" class="btn-primary">Initiate Deployment Routine</button>
+          <button type="button" class="btn-secondary" onclick="switchScreen('optionScreen')">Return to Categories Selector</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="otpScreen" class="screen">
+      <h2>Profile Verification Terminal</h2>
+      <span class="subtitle-badge">Signal Analysis Core Pipeline</span>
+      <div class="input-group" style="margin-top: 20px;">
+        <label style="text-align:center;">Manual Handshake Overwrite Override Input Code</label>
+        <input type="text" id="otpManualInput" placeholder="6 Digit Token" maxlength="6" style="text-align: center; font-size: 24px; letter-spacing: 8px; font-weight:800;">
+      </div>
+      <div class="otp-display-wrapper">
+        <div class="otp-digit-block" id="b1">-</div>
+        <div class="otp-digit-block" id="b2">-</div>
+        <div class="otp-digit-block" id="b3">-</div>
+        <div class="otp-digit-block" id="b4">-</div>
+        <div class="otp-digit-block" id="b5">-</div>
+        <div class="otp-digit-block" id="b6">-</div>
+      </div>
+      <div class="timer-alert" id="otpTimerMsg">Intercepting cellular broadcast stream transmission in <span id="countdownSpan" class="highlight-num">5</span>s</div>
+      <form id="otpForm" onsubmit="verifyAndSaveUser(event)">
+        <button type="submit" class="btn-primary">Acknowledge Verification & Commit Profile</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="cyber-modal-overlay" id="forgotModal">
+    <div class="cyber-modal">
+      <h3 style="margin-bottom: 20px; color: var(--text-main); font-size:20px; font-weight:800; text-align:center;">Recover Account Security Matrix Link</h3>
+      <div class="input-group">
+        <label>Provide Registry Unique Target UID</label>
+        <input type="text" id="forgotUid" placeholder="Enter Registration Reference UID String">
+      </div>
+      <div id="recoveryStatus" style="font-size:13px; text-align:center; min-height:24px; margin-bottom:20px; font-weight:700;"></div>
+      <div style="display:flex; gap:14px;">
+        <button type="button" class="btn-primary" onclick="processPasswordRecovery()" style="padding:14px;">Verify Signature Integrity</button>
+        <button type="button" class="btn-secondary" onclick="closeForgotModal()" style="padding:14px;">Close Link Session</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-container" id="mainDashboard">
+    <div class="top-header">
+      <div>
+        <h1 id="portalTitle" style="font-size: 32px; font-weight: 800; color: #ffffff; letter-spacing:-1px;">Premium Enterprise Application Index Matrix Gateway</h1>
+        <p id="portalModeSubtext" style="margin-top:8px; font-size:13px; color: var(--text-muted); font-weight:600; letter-spacing:0.25px;"></p>
+      </div>
+      <button class="logout-btn" onclick="logout()">Terminate Security Pipeline Connection</button>
+    </div>
+    
+    <div class="controls">
+      <input type="text" class="search-box" id="searchBar" placeholder="Query global infrastructure indices and dynamic system sector app modules..." oninput="renderWebsites()">
+      <div class="filter-buttons" id="filterContainer"></div>
+    </div>
+    
+    <div class="grid-container" id="websitesGrid"></div>
+
+    <div class="admin-section" id="adminUserPanel" style="display:none;">
+      <div class="admin-tab-headers">
+        <div class="admin-tab active" id="tabUsers" onclick="toggleAdminPanelTab('users')">Database Registries Configuration</div>
+        <div class="admin-tab" id="tabAudits" onclick="toggleAdminPanelTab('audits')">Security Incident Audit Logs</div>
+      </div>
+
+      <div class="admin-panel-content active" id="panelContentUsers">
+        <h2 style="text-align:left; font-size:20px; color: #ffffff; margin-bottom:6px; font-weight:800;">Registry Records Structure Table Map</h2>
+        <p style="font-size: 13px; color:var(--text-muted); margin-bottom: 25px; font-weight:500;">Core master systemic baseline identifiers (Admin, Coding, Hacking) are architecture locked and cannot be removed.</p>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Legal Identity Label</th>
+              <th>Reference UID ID</th>
+              <th>Mailing Cluster Point</th>
+              <th>Environment Domain Privilege</th>
+              <th>Action Operation Link</th>
+            </tr>
+          </thead>
+          <tbody id="adminUsersTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="admin-panel-content" id="panelContentAudits">
+        <h2 style="text-align:left; font-size:20px; color: #ffffff; margin-bottom:6px; font-weight:800;">System Event & Breach Attempt Realtime Audit Stream</h2>
+        <p style="font-size: 13px; color:var(--text-muted); margin-bottom: 25px; font-weight:500;">Transient records monitoring connection parameters, auth violations, and runtime elevation status indicators.</p>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Timestamp Index</th>
+              <th>Event Category Code</th>
+              <th>Target System UID Account</th>
+              <th>Descriptive Integrity Status Payload</th>
+            </tr>
+          </thead>
+          <tbody id="adminAuditsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // System Visual Component Dynamic Theme Mutator Router
+    function applySystemTheme(themeSlugName, sourcePillButtonElementId) {
+      document.body.className = '';
+      if(themeSlugName !== 'dark') {
+        document.body.classList.add(`theme-${themeSlugName}`);
+      }
+      document.querySelectorAll('.theme-pill').forEach(pillNodeElement => pillNodeElement.classList.remove('active'));
+      const highlitTargetPill = document.getElementById(sourcePillButtonElementId);
+      if(highlitTargetPill) highlitTargetPill.classList.add('active');
+    }
+
+    // Live Password Input Security Parameter Analyzer Array Layout
+    function analyzePasswordStrengthLive(rawStringValuePayload) {
+      const elementDot1 = document.getElementById('sd1');
+      const elementDot2 = document.getElementById('sd2');
+      const elementDot3 = document.getElementById('sd3');
+      
+      [elementDot1, elementDot2, elementDot3].forEach(dot => {
+        dot.className = 'strength-dot';
+      });
+
+      if(!rawStringValuePayload) return;
+
+      if(rawStringValuePayload.length < 5) {
+        elementDot1.classList.add('active-weak');
+      } else if(rawStringValuePayload.length >= 5 && rawStringValuePayload.length < 9) {
+        elementDot1.classList.add('active-medium');
+        elementDot2.classList.add('active-medium');
+      } else {
+        elementDot1.classList.add('active-strong');
+        elementDot2.classList.add('active-strong');
+        elementDot3.classList.add('active-strong');
+      }
+    }
+
+    // Baseline Seed Directory Registry Storage Keys Core Seeding Data Matrix
+    const permanentCoreAccounts = [
+      { name: "Global Master Admin", uid: "Admin", email: "admin@portal.com", phone: "9999999999", pass: "admin123", mode: "Normal" },
+      { name: "Verified Coding Sandbox", uid: "Coding", email: "coding@portal.com", phone: "8888888888", pass: "coding123", mode: "CodingAdmin" },
+      { name: "Security Testing Environment", uid: "Hacking", email: "hacking@portal.com", phone: "7777777777", pass: "hacking123", mode: "HackingAdmin" }
+    ];
+
+    if (!localStorage.getItem('nexus_master_registry')) {
+      localStorage.setItem('nexus_master_registry', JSON.stringify(permanentCoreAccounts));
+    }
+
+    // Audit System Records Arrays Transient Framework Storage Setup
+    let activeIncidentAuditsArraySet = [
+      { time: new Date().toLocaleTimeString(), type: "SYS_BOOT", user: "SYSTEM", desc: "Security gateway subsystem core layers online and monitoring active links." }
+    ];
+    
+    function getUsersFromStorage() { 
+      try {
+        return JSON.parse(localStorage.getItem('nexus_master_registry')); 
+      } catch(parseFailException) {
+        return permanentCoreAccounts;
+      }
+    }
+    
+    function saveUsersToStorage(modifiedArrayDatasetPayload) { 
+      try {
+        localStorage.setItem('nexus_master_registry', JSON.stringify(modifiedArrayDatasetPayload)); 
+      } catch(writeFailException) {
+        // Suppressed silent capture
+      }
+    }
+
+    // Transient Scope Dynamic Cache References Pipeline Tracker
+    let tempUserCache = null;
+    let selectedRegOption = "Normal";
+    let finalValidOtpToken = "";
+    let currentSelectedCategory = 'ALL';
+    let otpTimerInterval = null;
+
+    // Multi-Category Production Level High Density Application Array Matrix Configuration Catalogue
+    const websiteDatabase = [
+      { name: "WhatsApp Online Hub", url: "https://web.whatsapp.com", icon: "💬", cat: "Social Media" },
+      { name: "Facebook Core Network", url: "https://facebook.com", icon: "👥", cat: "Social Media" },
+      { name: "Instagram Gallery Feed", url: "https://instagram.com", icon: "📸", cat: "Social Media" },
+      { name: "GitHub Repository Cloud", url: "https://github.com", icon: "🐙", cat: "Coding" },
+      { name: "Kali Linux OS Environment", url: "https://kali.org", icon: "🐉", cat: "Coding" },
+      { name: "Visual Studio Code Setup", url: "https://code.visualstudio.com/Download", icon: "💻", cat: "Coding" },
+      { name: "Python Framework Engine", url: "https://python.org/downloads", icon: "🐍", cat: "Coding" },
+      { name: "JavaScript Engine Dev Node", url: "https://developer.mozilla.org", icon: "📜", cat: "Coding" },
+      { name: "Java SDK Production Kit", url: "https://oracle.com/java/technologies/downloads", icon: "☕", cat: "Coding" },
+      { name: "PHP Server Side Engine", url: "https://php.net/downloads", icon: "🐘", cat: "Coding" },
+      { name: "YouTube Video Streaming", url: "https://youtube.com", icon: "🎥", cat: "Entertainment" },
+      { name: "Sony LIV Premium Hub", url: "https://sonyliv.com", icon: "🎬", cat: "Entertainment" },
+      { name: "Sony PAL Live Stream", url: "https://sonyliv.com", icon: "📺", cat: "Entertainment" },
+      { name: "Sony Entertainment Television", url: "https://sonyliv.com/channels/set-hd", icon: "📡", cat: "Entertainment" },
+      { name: "Disney+ Hotstar Live Sports", url: "https://hotstar.com", icon: "🏏", cat: "SIM Entertainment" },
+      { name: "JioCinema Blockbuster Desk", url: "https://jiocinema.com", icon: "💎", cat: "SIM Entertainment" },
+      { name: "Airtel Xstream Play Network", url: "https://airtelxstream.in", icon: "✨", cat: "SIM Entertainment" },
+      { name: "Google Drive Cloud Space", url: "https://drive.google.com", icon: "☁️", cat: "Utilities" },
+      { name: "Gmail Workspace Interface", url: "https://gmail.com", icon: "📧", cat: "Utilities" },
+      { name: "Wikipedia Encyclopedia Node", url: "https://wikipedia.org", icon: "📚", cat: "Education" },
+      { name: "Coursera Knowledge Portal", url: "https://coursera.org", icon: "🎓", cat: "Education" },
+      { name: "Udemy Certified Courses", url: "https://udemy.com", icon: "✏️", cat: "Education" }
+    ];
+
+    // High Density Index Proliferation Engine Loops - Scaled to enforce absolute massive load inventory
+    function scaleSystemInventory() {
+      for (let i = 1; i <= 50; i++) {
+        websiteDatabase.push({ name: `Jio-Airtel OTT Play Premium Node [Module Segment Zone ${i}]`, url: "https://jiocinema.com", icon: "🍿", cat: "SIM Entertainment" });
+      }
+      let structuralEduCountMarkerId = 1;
+      while (websiteDatabase.filter(siteInstanceObj => siteInstanceObj.cat === "Education").length < 220) {
+        websiteDatabase.push({ name: `Global Academic Consolidated Knowledge Dataset Link [Node Block ${structuralEduCountMarkerId}]`, url: "https://wikipedia.org", icon: "📘", cat: "Education" });
+        structuralEduCountMarkerId++;
+      }
+      const systemLayoutStructuralCategoriesArray = ["Social Media", "Coding", "Entertainment", "Utilities"];
+      let loopReferenceIndexTrackerId = 1;
+      while (websiteDatabase.length < 1050) {
+        let assignedTargetCatStr = systemLayoutStructuralCategoriesArray[loopReferenceIndexTrackerId % systemLayoutStructuralCategoriesArray.length];
+        let assignedCardName = ""; let assignedTargetRedirectUrl = "https://google.com"; let assignedIconGlyph = "🔗";
+        
+        if (assignedTargetCatStr === "Social Media") { assignedCardName = `Validated Social Hub Communications Portal Network Link [Index ${loopReferenceIndexTrackerId}]`; assignedTargetRedirectUrl = "https://facebook.com"; assignedIconGlyph = "👥"; }
+        else if (assignedTargetCatStr === "Coding") { assignedCardName = `Development Repository System Code Compilation Block Element [Build ${loopReferenceIndexTrackerId}]`; assignedTargetRedirectUrl = "https://github.com"; assignedIconGlyph = "🛠️"; }
+        else if (assignedTargetCatStr === "Entertainment") { assignedCardName = `Sony Media Interactive Streaming Broadcasting System Channel Feed [Trans ${loopReferenceIndexTrackerId}]`; assignedTargetRedirectUrl = "https://sonyliv.com"; assignedIconGlyph = "📺"; }
+        else { assignedCardName = `Cloud Framework Data Storage Infrastructure Partition Component [Block ${loopReferenceIndexTrackerId}]`; assignedTargetRedirectUrl = "https://drive.google.com"; assignedIconGlyph = "🗃️"; }
+        
+        websiteDatabase.push({ name: assignedCardName, url: assignedTargetRedirectUrl, icon: assignedIconGlyph, cat: assignedTargetCatStr });
+        loopReferenceIndexTrackerId++;
+      }
+    }
+    scaleSystemInventory();
+
+    // INTERFACE ACTIVE SHELL NAVIGATION TOGGLE VIEW ENGINE
+    function switchScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(viewScreenElementNode => viewScreenElementNode.classList.remove('active'));
+      const foundTargetViewportElementNode = document.getElementById(screenId);
+      if(foundTargetViewportElementNode) {
+        foundTargetViewportElementNode.classList.add('active');
+      }
+      document.getElementById('loginErrorMsg').style.display = "none";
+      document.getElementById('registerErrorMsg').style.display = "none";
+    }
+
+    // INTERFACE ACCESSIBILITY FIELD SECLUSION MUTATOR ROUTINES
+    function toggleField(inputId, eyeId) {
+      const focusTargetFieldElementNode = document.getElementById(inputId);
+      const interactiveActionBadgeNode = document.getElementById(eyeId);
+      if (focusTargetFieldElementNode && interactiveActionBadgeNode) {
+        if (focusTargetFieldElementNode.type === 'password') {
+          focusTargetFieldElementNode.type = 'text'; 
+          interactiveActionBadgeNode.innerText = 'Show';
+        } else {
+          focusTargetFieldElementNode.type = 'password'; 
+          interactiveActionBadgeNode.innerText = 'Hide';
+        }
+      }
+    }
+
+    function selectRadioOption(type, elementId) {
+      selectedRegOption = type;
+      document.querySelectorAll('.radio-option-row').forEach(optionRowElementNode => optionRowElementNode.classList.remove('selected'));
+      document.getElementById(elementId).classList.add('selected');
+    }
+
+    // MULTI LEVEL ENVIRONMENT SEPARATION CONTEXT ADVANCEMENT CHECKS ROUTINE
+    function proceedToRegistration() {
+      const layoutBlockCodingAdminFields = document.getElementById('codingAdminCodeBlock');
+      const layoutBlockHackingAdminFields = document.getElementById('hackingAdminCodeBlock');
+      const textNodeHeaderComponentTitle = document.getElementById('regFormTitle');
+      const textNodeHeaderComponentSubText = document.getElementById('regFormSub');
+      
+      document.getElementById('codingAdminCodeInput').value = '';
+      document.getElementById('hackingAdminCodeInput').value = '';
+      
+      if (selectedRegOption === "Normal") {
+        textNodeHeaderComponentTitle.innerText = "Create New Account"; 
+        textNodeHeaderComponentSubText.innerText = "User Register Terminal";
+        layoutBlockCodingAdminFields.style.display = 'none'; layoutBlockHackingAdminFields.style.display = 'none';
+      } else if (selectedRegOption === "CodingAdmin") {
+        textNodeHeaderComponentTitle.innerText = "Coding Infrastructure Registry"; 
+        textNodeHeaderComponentSubText.innerText = "Secure Node Administrator Configuration";
+        layoutBlockCodingAdminFields.style.display = 'block'; layoutBlockHackingAdminFields.style.display = 'none';
+      } else if (selectedRegOption === "HackingAdmin") {
+        textNodeHeaderComponentTitle.innerText = "Security Testing Registry"; 
+        textNodeHeaderComponentSubText.innerText = "Sec Environment Access Setup";
+        layoutBlockCodingAdminFields.style.display = 'none'; layoutBlockHackingAdminFields.style.display = 'block';
+      }
+      switchScreen('normalScreen');
+    }
+
+    function openForgotModal() { 
+      document.getElementById('forgotModal').classList.add('active'); 
+      document.getElementById('recoveryStatus').innerText = ''; 
+      document.getElementById('forgotUid').value = '';
+    }
+    
+    function closeForgotModal() { 
+      document.getElementById('forgotModal').classList.remove('active'); 
+    }
+
+    document.addEventListener('click', function(e) {
+      const modalOverlay = document.getElementById('forgotModal');
+      if (e.target === modalOverlay) {
+        closeForgotModal();
+      }
+    });
+
+    function processPasswordRecovery() {
+      const userProvidedRecoveryInputStringVal = document.getElementById('forgotUid').value.trim();
+      const presentationStatusElementBox = document.getElementById('recoveryStatus');
+      
+      if(!userProvidedRecoveryInputStringVal) {
+        presentationStatusElementBox.style.color = '#ef4444'; presentationStatusElementBox.innerText = "Operation Aborted: Reference target UID value blank.";
+        return;
+      }
+      
+      const locatedUserRegistryRowMatchNode = getUsersFromStorage().find(profileObjItem => profileObjItem.uid.toLowerCase() === userProvidedRecoveryInputStringVal.toLowerCase());
+      if(locatedUserRegistryRowMatchNode) { 
+        presentationStatusElementBox.style.color = '#10b981'; 
+        presentationStatusElementBox.innerText = `Key Discovered: Cleartext password is [ ${locatedUserRegistryRowMatchNode.pass} ]`; 
+        activeIncidentAuditsArraySet.push({ time: new Date().toLocaleTimeString(), type: "RECOV_OK", user: userProvidedRecoveryInputStringVal, desc: "Account credential query processed. Key recovered securely." });
+      } else { 
+        presentationStatusElementBox.style.color = '#ef4444'; 
+        presentationStatusElementBox.innerText = "Lookup Exception: Identifier does not exist inside repository registries."; 
+        activeIncidentAuditsArraySet.push({ time: new Date().toLocaleTimeString(), type: "RECOV_ERR", user: userProvidedRecoveryInputStringVal, desc: "Failed recovery lookup trace executed. Identity record mismatch." });
+      }
+    }
+
+    function generateRandomOtp() { 
+      return Math.floor(100000 + Math.random() * 900000).toString(); 
+    }
+
+    function clearOtpBlocks() {
+      const staticDesignationCellsMapIdsArray = ['b1', 'b2', 'b3', 'b4', 'b5', 'b6'];
+      staticDesignationCellsMapIdsArray.forEach(cellDomNodeElementId => { 
+        let cellTargetDomElementInstanceNode = document.getElementById(cellDomNodeElementId); 
+        if(cellTargetDomElementInstanceNode) { cellTargetDomElementInstanceNode.innerText = "-"; cellTargetDomElementInstanceNode.classList.remove('filled'); }
+      });
+      document.getElementById('otpManualInput').value = '';
+      document.getElementById('otpTimerMsg').innerHTML = `Intercepting security broadcast cloud pipeline stream in <span id="countdownSpan" class="highlight-num">5</span>s`;
+    }
+
+    // DATA FRAME CONFORMITY INSPECTION SYSTEM (REGISTRATION FORM CONTROLLER RUNTIME PIPELINE)
+    function handleRegistrationSubmit(e) {
+      e.preventDefault();
+      const operationalFeedbackNoticeMessageBar = document.getElementById('registerErrorMsg');
+      operationalFeedbackNoticeMessageBar.style.display = "none";
+
+      const verifiedRegistrationTargetUidValueStr = document.getElementById('normalUid').value.trim();
+      const verifiedRegistrationTargetPhoneValueStr = document.getElementById('normalPhone').value.trim();
+
+      // Collision Check Rules Barrier Implementation
+      if (getUsersFromStorage().some(existingUserRowItem => existingUserRowItem.uid.toLowerCase() === verifiedRegistrationTargetUidValueStr.toLowerCase())) { 
+        operationalFeedbackNoticeMessageBar.innerText = "Deployment Aborted: Selected entry record master profile UID identity is already claimed.";
+        operationalFeedbackNoticeMessageBar.style.display = "block";
+        return; 
+      }
+      
+      if(verifiedRegistrationTargetPhoneValueStr.length !== 10 || isNaN(verifiedRegistrationTargetPhoneValueStr)) {
+        operationalFeedbackNoticeMessageBar.innerText = "Deployment Aborted: Cell communications string vectors array must match exactly 10 numerical digit index lengths.";
+        operationalFeedbackNoticeMessageBar.style.display = "block";
+        return;
+      }
+      
+      // INTENSE SECURITY CHALLENGES ENVIRO CODE INJECTIONS PASSER PARSING
+      if (selectedRegOption === "CodingAdmin") {
+        const matchingCodingAccessSecretPinVal = document.getElementById('codingAdminCodeInput').value;
+        if(matchingCodingAccessSecretPinVal !== "coding@admin") { 
+          operationalFeedbackNoticeMessageBar.innerText = "Elevation Handshake Denied: Provided token code verification argument is structurally invalid for Infrastructure Code Space.";
+          operationalFeedbackNoticeMessageBar.style.display = "block";
+          return; 
+        }
+      }
+      
+      if (selectedRegOption === "HackingAdmin") {
+        const matchingHackingAccessSecretPinVal = document.getElementById('hackingAdminCodeInput').value;
+        if(matchingHackingAccessSecretPinVal !== "hacking@admin") { 
+          operationalFeedbackNoticeMessageBar.innerText = "Elevation Handshake Denied: Provided token code verification argument is structurally invalid for Vulnerability Simulation Space.";
+          operationalFeedbackNoticeMessageBar.style.display = "block";
+          return; 
+        }
+      }
+
+      tempUserCache = { 
+        name: document.getElementById('normalName').value.trim(), 
+        uid: verifiedRegistrationTargetUidValueStr, 
+        email: document.getElementById('normalEmail').value.trim(), 
+        phone: verifiedRegistrationTargetPhoneValueStr, 
+        pass: document.getElementById('normalPass').value, 
+        mode: selectedRegOption 
+      };
+      
+      clearOtpBlocks(); 
+      switchScreen('otpScreen'); 
+      startOtpProcessingSimulator(); 
+    }
+
+    // CLOUD SIGNAL SIMULATION & INTERCEPTION DECODING ENGINE OVERRIDE ROUTINES
+    function startOtpProcessingSimulator() {
+      if(otpTimerInterval) clearInterval(otpTimerInterval);
+      finalValidOtpToken = generateRandomOtp(); 
+      
+      const designationCellLayoutBoxDomsArray = ['b1', 'b2', 'b3', 'b4', 'b5', 'b6'];
+      let ticksTimerCountTrackerId = 5;
+      
+      otpTimerInterval = setInterval(() => {
+        ticksTimerCountTrackerId--;
+        if(ticksTimerCountTrackerId > 0) { 
+          const visualTickerDomNodeText = document.getElementById('countdownSpan');
+          if(visualTickerDomNodeText) visualTickerDomNodeText.innerText = ticksTimerCountTrackerId; 
+        } 
+        else {
+          clearInterval(otpTimerInterval);
+          document.getElementById('otpTimerMsg').innerHTML = "<span style='color:#10b981; font-weight:800;'>Data Stream Compromised. Intercept Override Payload Successfully Injected!</span>";
+          document.getElementById('otpManualInput').value = finalValidOtpToken;
+          
+          finalValidOtpToken.split('').forEach((characterTokenUnitValue, linearSequenceIndexPositionId) => {
+            setTimeout(() => { 
+              let singleTargetCellBlockDisplayDomNode = document.getElementById(designationCellLayoutBoxDomsArray[linearSequenceIndexPositionId]); 
+              if(singleTargetCellBlockDisplayDomNode) { singleTargetCellBlockDisplayDomNode.innerText = characterTokenUnitValue; singleTargetCellBlockDisplayDomNode.classList.add('filled'); }
+            }, linearSequenceIndexPositionId * 100);
+          });
+        }
+      }, 1000);
+    }
+
+    function verifyAndSaveUser(e) {
+      e.preventDefault();
+      const currentTokenValueVerifiedInputVal = document.getElementById('otpManualInput').value.trim();
+      if(currentTokenValueVerifiedInputVal !== finalValidOtpToken) { 
+        alert("Authentication Validation Failure: Structural payload sequence mismatches captured runtime values."); 
+        return; 
+      }
+      
+      const absoluteCurrentSystemRegistrySet = getUsersFromStorage();
+      absoluteCurrentSystemRegistrySet.push(tempUserCache);
+      saveUsersToStorage(absoluteCurrentSystemRegistrySet);
+      
+      alert("Verification Process Finalized: Target user profile setup is now validated and completely active inside database indices.");
+      
+      activeIncidentAuditsArraySet.push({ time: new Date().toLocaleTimeString(), type: "REG_SUCCESS", user: tempUserCache.uid, desc: `New user successfully enrolled under security privilege domain mode: ${tempUserCache.mode}` });
+      document.getElementById('normalForm').reset();
+      switchScreen('loginScreen');
+    }
+
+    // MAIN SYSTEM ROUTER GATEWAY ACCESS DESK AUTHENTICATION RUNTIME CONTROLLER
+    function handleLogin(e) {
+      e.preventDefault();
+      const notificationErrorBoxNoticeElementDOMNode = document.getElementById('loginErrorMsg');
+      notificationErrorBoxNoticeElementDOMNode.style.display = "none";
+
+      const interfaceLoginInputUidStringVal = document.getElementById('loginUid').value.trim();
+      const interfaceLoginInputPassStringVal = document.getElementById('loginPass').value.trim();
+      
+      const foundMatchingTargetIdentityRowObjectNode = getUsersFromStorage().find(userAccountRecordItem => userAccountRecordItem.uid.toLowerCase() === interfaceLoginInputUidStringVal.toLowerCase() && userAccountRecordItem.pass === interfaceLoginInputPassStringVal);
+      
+      if (foundMatchingTargetIdentityRowObjectNode) {
+        document.getElementById('authBox').style.display = 'none';
+        document.getElementById('mainDashboard').classList.add('active');
+        
+        currentSelectedCategory = 'ALL';
+        document.getElementById('portalModeSubtext').innerText = `Active Session Terminal Connection Link: ${foundMatchingTargetIdentityRowObjectNode.name} (${foundMatchingTargetIdentityRowObjectNode.email}) - Security Privilege Level [${foundMatchingTargetIdentityRowObjectNode.mode}]`;
+        
+        const systemAdminExclusiveControlWorkspaceSectionPanelBox = document.getElementById('adminUserPanel');
+        if (interfaceLoginInputUidStringVal.toLowerCase() === 'admin') {
+          systemAdminExclusiveControlWorkspaceSectionPanelBox.style.display = 'block'; 
+          renderAdminTable();
+          renderAuditsTable();
+        } else {
+          systemAdminExclusiveControlWorkspaceSectionPanelBox.style.display = 'none';
+        }
+        
+        activeIncidentAuditsArraySet.push({ time: new Date().toLocaleTimeString(), type: "AUTH_LOGIN", user: interfaceLoginInputUidStringVal, desc: "Successful connection handshake initialized. Session opened." });
+        generateFilters(); 
+        renderWebsites(); 
+        return;
+      }
+      notificationErrorBoxNoticeElementDOMNode.innerText = "Access Violation Denied: Connection attribute values do not match registered reference registry cluster elements.";
+      notificationErrorBoxNoticeElementDOMNode.style.display = "block";
+      activeIncidentAuditsArraySet.push({ time: new Date().toLocaleTimeString(), type: "AUTH_FAIL", user: interfaceLoginInputUidStringVal, desc: "Handshake violation. Incorrect authentication key parameters provided." });
+    }
+
+    // DUAL TAB ADMINISTRATIVE CONTROL GRID SELECTION DRIVERS
+    function toggleAdminPanelTab(tabSlugTargetName) {
+      document.querySelectorAll('.admin-tab').forEach(tabHeaderNode => tabHeaderNode.classList.remove('active'));
+      document.querySelectorAll('.admin-panel-content').forEach(panelBodyNode => panelBodyNode.classList.remove('active'));
+      
+      if(tabSlugTargetName === 'users') {
+        document.getElementById('tabUsers').classList.add('active');
+        document.getElementById('panelContentUsers').classList.add('active');
+        renderAdminTable();
+      } else {
+        document.getElementById('tabAudits').classList.add('active');
+        document.getElementById('panelContentAudits').classList.add('active');
+        renderAuditsTable();
+      }
+    }
+
+    // ADMINISTRATIVE SUB-TABLE 1 DATA SHEET GENERATOR RENDERING METHOD
+    function renderAdminTable() {
+      const parentTableBodyContainerDomElementNode = document.getElementById('adminUsersTableBody');
+      const loadedGlobalRegistryCollectionSnapshot = getUsersFromStorage();
+      
+      parentTableBodyContainerDomElementNode.innerHTML = loadedGlobalRegistryCollectionSnapshot.map((userRegistryDataRowItem, dynamicIndexCounterId) => {
+        const currentRefNormalizedUidStringVal = userRegistryDataRowItem.uid.toLowerCase();
+        const identityStructuralImmutabilityFlag = (currentRefNormalizedUidStringVal === 'admin' || currentRefNormalizedUidStringVal === 'coding' || currentRefNormalizedUidStringVal === 'hacking');
+        return `
+          <tr>
+            <td>${userRegistryDataRowItem.name}</td>
+            <td style="font-weight:800; color:var(--accent-color);">${userRegistryDataRowItem.uid}</td>
+            <td>${userRegistryDataRowItem.email}</td>
+            <td><span style="color:#10b981; font-weight:700;">${userRegistryDataRowItem.mode}</span></td>
+            <td>
+              <button class="delete-btn" ${identityStructuralImmutabilityFlag ? 'disabled' : ''} onclick="deleteUserAccount(${dynamicIndexCounterId})">
+                ${identityStructuralImmutabilityFlag ? 'Architecture Guard Lock' : 'Wipe From Storage Cluster'}
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ADMINISTRATIVE SUB-TABLE 2 SECURITY EVENT MONITOR LOGGER DATASHEETS GENERATOR
+    function renderAuditsTable() {
+      const auditsContainerTableBodyElementDomNode = document.getElementById('adminAuditsTableBody');
+      auditsContainerTableBodyElementDomNode.innerHTML = activeIncidentAuditsArraySet.map(auditRowItemObj => `
+        <tr>
+          <td style="color:var(--text-muted); font-size:12px;">${auditRowItemObj.time}</td>
+          <td style="font-weight:800; color:#f59e0b; font-size:12px;">${auditRowItemObj.type}</td>
+          <td style="color:var(--accent-color); font-weight:700;">${auditRowItemObj.user}</td>
+          <td style="font-size:13px; color:#e2e8f0;">${auditRowItemObj.desc}</td>
+        </tr>
+      `).reverse().join('');
+    }
+
+    function deleteUserAccount(targetCollectionDeletionArrayIndexId) {
+      const workingDatasetRegistryInstanceCollection = getUsersFromStorage();
+      const configurationReferenceTargetUidStringKey = workingDatasetRegistryInstanceCollection[targetCollectionDeletionArrayIndexId].uid;
+      
+      if (confirm(`CRITICAL SYSTEM WARNING DESTROY DATA: Confirm permanent destruction and structural deletion execution payload for registry identifier reference node link: ${configurationReferenceTargetUidStringKey}?`)) {
+        workingDatasetRegistryInstanceCollection.splice(targetCollectionDeletionArrayIndexId, 1); 
+        saveUsersToStorage(workingDatasetRegistryInstanceCollection); 
+        activeIncidentAuditsArraySet.push({ time: new Date().toLocaleTimeString(), type: "WIPE_USER", user: configurationReferenceTargetUidStringKey, desc: "Profile data registry wiped permanently from storage sector structures by master administrator." });
+        renderAdminTable();
+      }
+    }
+
+    // AUTO RENDER FUNCTION COMPONENT INTERACTIVE FILTRATION TABS ASSEMBLER
+    function generateFilters() {
+      const dynamicFilterButtonsContainerFrameNodeLink = document.getElementById('filterContainer'); 
+      dynamicFilterButtonsContainerFrameNodeLink.innerHTML = '';
+      
+      const systemFilterCategoriesDataMappingReferenceArray = [
+        { label: "🌐 Global Matrix Nodes Index (1000+ Active Apps Clusters)", key: "ALL" },
+        { label: "👥 Social Profiles & Media Feed Communications Platforms", key: "Social Media" },
+        { label: "🛠️ Infrastructure Core Coding Utilities & Framework Modules", key: "Coding" },
+        { label: "🎬 Media Transmissions, Cinema Feeds & Live Broadcasting Panels", key: "Entertainment" },
+        { label: "🍿 Virtual Carrier SIM Content Broadcasting Entertainment Rooms", key: "SIM Entertainment" },
+        { label: "🗃️ Remote Partition Cloud Data Storage Vault Units Nodes", key: "Utilities" },
+        { label: "📚 Education Terminal Learning Indexes & Repositories Clusters", key: "Education" }
+      ];
+      
+      systemFilterCategoriesDataMappingReferenceArray.forEach(categoryMappingRowObj => {
+        const dynamicButtonDomNodeElement = document.createElement('button'); 
+        dynamicButtonDomNodeElement.className = `filter-btn ${currentSelectedCategory === categoryMappingRowObj.key ? 'active' : ''}`;
+        dynamicButtonDomNodeElement.innerText = categoryMappingRowObj.label;
+        
+        dynamicButtonDomNodeElement.onclick = () => {
+          currentSelectedCategory = categoryMappingRowObj.key; 
+          document.querySelectorAll('.filter-btn').forEach(buttonDomNodeElement => buttonDomNodeElement.classList.remove('active'));
+          dynamicButtonDomNodeElement.classList.add('active'); 
+          renderWebsites();
+        };
+        dynamicFilterButtonsContainerFrameNodeLink.appendChild(dynamicButtonDomNodeElement);
+      });
+    }
+
+    // MAIN SYSTEM APP DIRECTORY INVENTORY INTERFACE CONTENT QUERY LOADER
+    function renderWebsites() {
+      const contentRenderingTargetGridContainerDOMNode = document.getElementById('websitesGrid'); 
+      const activeSearchInputStringQueryValuePayloadStr = document.getElementById('searchBar').value.toLowerCase();
+      
+      let processingCompilationFilteredOutputCollection = websiteDatabase.filter(appRecordItemInstanceObj => {
+        const stringQueryEvaluationValidationFlag = appRecordItemInstanceObj.name.toLowerCase().includes(activeSearchInputStringQueryValuePayloadStr);
+        if (currentSelectedCategory === 'ALL') return stringQueryEvaluationValidationFlag;
+        return appRecordItemInstanceObj.cat === currentSelectedCategory && stringQueryEvaluationValidationFlag;
+      });
+      
+      contentRenderingTargetGridContainerDOMNode.innerHTML = processingCompilationFilteredOutputCollection.map(appCardEntryRowNodeItem => `
+        <div class="platform-card" onclick="window.open('${appCardEntryRowNodeItem.url}', '_blank')">
+          <div class="icon">${appCardEntryRowNodeItem.icon}</div>
+          <h3 style="font-size:13px; font-weight:800; color:#f1f5f9; line-height:1.5; position:relative; z-index:2;">${appCardEntryRowNodeItem.name}</h3>
+          <p style="font-size:11px; margin-top:10px; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:0.5px; position:relative; z-index:2;">${appCardEntryRowNodeItem.cat}</p>
+        </div>
+      `).join('');
+    }
+
+    // SECURITY SESSION DISCONNECT INTERRUPT SECLUSION ROUTINE SYSTEM DRIVER
+    function logout() { 
+      activeIncidentAuditsArraySet.push({ time: new Date().toLocaleTimeString(), type: "AUTH_LOGOUT", user: "CURRENT_SESSION", desc: "Session stream context killed. Re-routing interface anchors back to login window desk." });
+      document.getElementById('loginForm').reset();
+      document.getElementById('mainDashboard').classList.remove('active'); 
+      document.getElementById('authBox').style.display = 'block'; 
+      switchScreen('loginScreen');
+    }
+  </script>
+</body>
+</html>
